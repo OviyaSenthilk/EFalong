@@ -2,18 +2,18 @@ import { React, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
 
-//import axios from 'axios';
+import axios from 'axios';
 
 const Login = () => {
-//   const handleSubmit =async(e)=>{
-//     e.preventDefault();
-//     try {
-//       const response = await axios.post("http://localhost:5000/api/v2/user/login", { email, password });
-//       console.log(response.data);
-//     } catch (error) {
-//       console.error("There was an error logging in!", error);
-//     }
-//   };
+  const handleSubmit =async(e)=>{
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:5000/api/v2/user/login", { email, password });
+      console.log(response.data);
+    } catch (error) {
+      console.error("There was an error logging in!", error);
+    }
+  };
 
   
   const [email, setEmail] = useState("");
@@ -110,7 +110,7 @@ const Login = () => {
             </div>
             <div>
               <button
-                type="submit"
+                type="submit" onSubmit={handleSubmit}
                 className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
                 Submit
