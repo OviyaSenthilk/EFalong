@@ -1,17 +1,3 @@
-// import Nav from '../components/nav';
-
-// const Cart = () => {
-//     return (
-//         <>
-//             <Nav />
-//             <div>
-//                 <h1>Cart</h1>
-//             </div>
-//         </>
-//     );
-// }
-
-// export default Cart;
 import CartProduct from '../components/CartProduct';
 import Nav from '../components/nav';
 import { useState, useEffect } from 'react';
