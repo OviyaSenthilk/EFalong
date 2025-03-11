@@ -13,7 +13,7 @@ app.use(cookieParser());
 
 // Configure CORS to allow requests from React frontend
 app.use(cors({
-  origin: 'http://localhost:3001', // Update this if your frontend is hosted elsewhere
+  origin: 'http://localhost:3000', // Update this if your frontend is hosted elsewhere
   credentials: true, // Enable if you need to send cookies or authentication headers
 }));
 
