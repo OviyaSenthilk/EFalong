@@ -56,7 +56,6 @@ const userSchema = new mongoose.Schema({
       required: true,
     },
  },
- //
  cart: [
   {
     productId: {
@@ -72,7 +71,6 @@ const userSchema = new mongoose.Schema({
     },
   },
 ],
-//
  createdAt:{
   type: Date,
   default: Date.now(),
