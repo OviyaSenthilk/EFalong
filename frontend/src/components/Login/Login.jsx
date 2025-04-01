@@ -1,20 +1,26 @@
 import { React, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
-
 import axios from 'axios';
-
+import { useDispatch } from 'react-redux';
+import { setemail } from "../../store/userActions";
+//import { useNavigate } from "react-router-dom";
 const Login = () => {
   const handleSubmit =async(e)=>{
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:5000/api/v2/user/login", { email, password });
       console.log(response.data);
+          // // Dispatch action to store email in Redux state
+          // dispatch(setemail(email));
+          // // Redirect to profile page after successful login
+          // navigate("/");
     } catch (error) {
       console.error("There was an error logging in!", error);
     }
   };
-
+// const dispatch =useDispatch();
+// const navigate =useNavigate();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
