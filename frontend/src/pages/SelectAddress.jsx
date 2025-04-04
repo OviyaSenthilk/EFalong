@@ -1,19 +1,21 @@
-// SelectAddress.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Nav from '../components/nav'; // Ensure correct casing
 import { useNavigate } from 'react-router-dom';
-
+import { useSelector } from 'react-redux'; // Import useSelector
 const SelectAddress = () => {
     const [addresses, setAddresses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-
-    const userEmail = 'oviya.s2604@gmail.com';
+    // Retrieve email from Redux state
+    const userEmail = useSelector((state)=>state.user.email);
 
     useEffect(() => {
+         // Only fetch addresses if email exists
+        if(!userEmail)
+             return;
         const fetchAddresses = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/v2/user/addresses', {

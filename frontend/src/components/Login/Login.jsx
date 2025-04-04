@@ -4,24 +4,25 @@ import styles from "../../styles/styles";
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setemail } from "../../store/userActions";
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+// Ensure axios sends cookies with requests
+axios.defaults.withCredentials = true;
 const Login = () => {
   const handleSubmit =async(e)=>{
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:5000/api/v2/user/login", { email, password });
       console.log(response.data);
-          // // Dispatch action to store email in Redux state
-          // dispatch(setemail(email));
-          // // Redirect to profile page after successful login
-          // navigate("/");
+          // Dispatch action to store email in Redux state
+          dispatch(setemail(email));
+          // Redirect to profile page after successful login
+          navigate("/");
     } catch (error) {
       console.error("There was an error logging in!", error);
     }
   };
-// const dispatch =useDispatch();
-// const navigate =useNavigate();
-  
+  const dispatch =useDispatch();
+  const navigate =useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -34,7 +35,7 @@ const Login = () => {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" >
+          <form className="space-y-6"onSubmit={handleSubmit} >
             <div>
               <label
                 htmlFor="email"
@@ -116,7 +117,7 @@ const Login = () => {
             </div>
             <div>
               <button
-                type="submit" onSubmit={handleSubmit}
+                type="submit" 
                 className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
                 Submit
@@ -124,7 +125,7 @@ const Login = () => {
             </div>
             <div className={`${styles.noramlFlex} w-full`}>
               <h4>Not have any account?</h4>
-              {/* <Link to="/sign-up" className="text-blue-600 pl-2">
+              { /*<Link to="/sign-up" className="text-blue-600 pl-2">
                 Sign Up
               </Link> */}
               </div>
