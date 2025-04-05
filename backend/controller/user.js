@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
+const User=require("../model/user")
 const fs = require("fs");
-const User = require("../model/user");
 const router = express.Router();
 const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
@@ -12,8 +12,9 @@ const uploadDir = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
-const jwt = require("jsonwebtoken"); // Import JSON Web Token
-JWT_SECRET = "your_strong_secret_key"
+const {isAuthenticatedUser} =require("../middleware/auth")
+const jwt = require("jsonwebtoken"); // Import JSON Web Tokenconst UserModel = require("../model/user");
+JWT_SECRET = "randomtoken1234567890";
 
 router.post(
     "/create-user",
@@ -42,6 +43,7 @@ router.post(
       }
   
       const hashedPassword = await bcrypt.hash(password, 10);
+      console.log("At Create ", "Password: ", password, "Hash: ", hashedPassword);
       const user = await User.create({
         name,
         email,
@@ -51,7 +53,8 @@ router.post(
           url: fileUrl,
         },
       });
-  
+      console.log(user);
+       await user.save()
       res.status(201).json({ success: true, user });
     })
   );
@@ -62,7 +65,7 @@ router.post(
      if (!email || !password) {
          return next(new ErrorHandler("Please provide email and password", 400));
      }
-     const user = await User.findOne({ email }).select("+password");
+     const user = await UserModel.findOne({ email }).select("+password");
      if (!user) {
          return next(new ErrorHandler("Invalid Email or Password", 401));
      }
@@ -89,13 +92,57 @@ router.post(
          res.status(200).json({
              success: true,
              user,
+             token
          });
  
      });  
     
  }));
+// router.post("/login", catchAsyncErrors(async (req, res, next) => {
+//   console.log("Logging in user...");
+  
+//   const { email, password } = req.body;
 
-router.get("/profile", catchAsyncErrors(async (req, res, next) => {
+//   if (!email || !password) {
+//       return next(new ErrorHandler("Please provide email and password", 400));
+//   }
+//   const user = await User.findOne({ email }).select("+password");
+//   console.log("cfvgbhnjm")
+
+//   if (!user) {
+//       return next(new ErrorHandler("Invalid Email or Password", 401));
+//   }
+
+//   // Use await for bcrypt comparison
+//   const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+//   if (!isPasswordMatched) {
+//       return next(new ErrorHandler("Invalid Email or Password", 401));
+//   }
+
+//   const token = jwt.sign(
+//       { id: user._id, email: user.email },
+//       process.env.JWT_SECRET || "your_jwt_secret",
+//       { expiresIn: "1h" }
+//   );
+
+//   res.cookie("token", token, {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       sameSite: "Strict",
+//       maxAge: 3600000,
+//   });
+
+//   user.password = undefined;
+
+//   res.status(200).json({
+//       success: true,
+//       user,
+//   });
+// }));
+
+
+router.get("/profile", isAuthenticatedUser,catchAsyncErrors(async (req, res, next) => {
   const { email } = req.query;
   if (!email) {
       return next(new ErrorHandler("Please provide an email", 400));
@@ -115,7 +162,7 @@ router.get("/profile", catchAsyncErrors(async (req, res, next) => {
       addresses: user.addresses,
   });
 }));
-router.post("/add-address", catchAsyncErrors(async (req, res, next) => {
+router.post("/add-address",isAuthenticatedUser, catchAsyncErrors(async (req, res, next) => {
   const { country, city, address1, address2, zipCode, addressType, email } = req.body;
 
   const user = await User.findOne({ email });
@@ -141,7 +188,7 @@ router.post("/add-address", catchAsyncErrors(async (req, res, next) => {
       addresses: user.addresses,
   });
 }));
-router.get("/addresses", catchAsyncErrors(async (req, res, next) => {
+router.get("/addresses",isAuthenticatedUser, catchAsyncErrors(async (req, res, next) => {
   const { email } = req.query;
   if (!email) {
       return next(new ErrorHandler("Please provide an email", 400));

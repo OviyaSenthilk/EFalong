@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../model/order'); // Adjust path as needed
 const User = require('../model/user');   // Adjust path as needed
-
-router.post('/place-order', async (req, res) => {
+const {isAuthenticatedUser}=require('../middleware/auth')
+router.post('/place-order',isAuthenticatedUser, async (req, res) => {
     try {
         const { email, orderItems, shippingAddress } = req.body;
 
@@ -50,7 +50,7 @@ router.post('/place-order', async (req, res) => {
 
 
 
-router.get('/myorders', async (req, res) => {
+router.get('/myorders',isAuthenticatedUser, async (req, res) => {
     try {
         const { email } = req.query;
 
@@ -75,26 +75,26 @@ router.get('/myorders', async (req, res) => {
     }
 });
 
-router.patch('/cancel-order/:orderId', async (req, res) => {
-    try {
-        const { orderId } = req.params;
-        // Find the order by ID
-        const order = await Order.findById(orderId);
-        console.log(order);
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found.' });
-        }
+// router.patch('/cancel-order/:orderId',isAuthenticatedUser, async (req, res) => {
+//     try {
+//         const { orderId } = req.params;
+//         // Find the order by ID
+//         const order = await Order.findById(orderId);
+//         console.log(order);
+//         if (!order) {
+//             return res.status(404).json({ message: 'Order not found.' });
+//         }
 
-        // Update order status to 'cancelled'
-        order.orderStatus = 'Cancelled';
-        await order.save();
+//         // Update order status to 'cancelled'
+//         order.orderStatus = 'Cancelled';
+//         await order.save();
 
-        res.status(200).json({ message: 'Order cancelled successfully.', order });
-    } catch (error) {
-        console.error('Error cancelling order:', error);
-        res.status(500).json({ message: error.message });
-    }
-});
+//         res.status(200).json({ message: 'Order cancelled successfully.', order });
+//     } catch (error) {
+//         console.error('Error cancelling order:', error);
+//         res.status(500).json({ message: error.message });
+//     }
+// });
 
 
 
