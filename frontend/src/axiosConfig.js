@@ -6,4 +6,4 @@ const instance = axios.create({
     withCredentials: true,            // crucial for sending cookies
 });
 
-export default instance;
+export default instance; 

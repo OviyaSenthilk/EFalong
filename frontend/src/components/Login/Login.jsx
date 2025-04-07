@@ -8,6 +8,11 @@ import { useNavigate } from "react-router-dom";
 // Ensure axios sends cookies with requests
 axios.defaults.withCredentials = true;
 const Login = () => {
+  const dispatch =useDispatch();
+  const navigate =useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [visible, setVisible] = useState(false);
   const handleSubmit =async(e)=>{
     e.preventDefault();
     try {
@@ -21,11 +26,7 @@ const Login = () => {
       console.error("There was an error logging in!", error);
     }
   };
-  const dispatch =useDispatch();
-  const navigate =useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [visible, setVisible] = useState(false);
+ 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
