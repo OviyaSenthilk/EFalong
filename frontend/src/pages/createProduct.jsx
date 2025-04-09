@@ -19,8 +19,8 @@ const CreateProduct = () => {
     const [email, setEmail] = useState("");
 
     const categoriesData = [
-        { title: "Electronics" },
-        { title: "Fashion" },
+        { title: "Nature" },
+        { title: "Photography" },
         { title: "Books" },
         { title: "Home Appliances" },
     ];

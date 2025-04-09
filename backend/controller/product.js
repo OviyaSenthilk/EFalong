@@ -73,7 +73,7 @@ router.post('/create-product',isAuthenticatedUser, pupload.array('images', 10), 
 });
 
 // Route: Get all products
-router.get('/get-products', isAuthenticatedUser,async (req, res) => {
+router.get('/get-products',async (req, res) => {
     try {
         const products = await Product.find();
         const productsWithFullImageUrl = products.map(product => {

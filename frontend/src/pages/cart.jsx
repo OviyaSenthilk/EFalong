@@ -12,7 +12,6 @@ const Cart = () => {
 
   useEffect(() => {
     if (!email) return;
-    // Use axios with credentials
     axios.get(`/api/v2/product/cartproducts?email=${email}`)
       .then((res) => {
         setProducts(
